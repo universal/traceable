@@ -20,9 +20,10 @@ module Traceable
       @log_lines.each do |type, options|
         if options[:teaser] =~ line
             if options[:regexp] =~ line
-              handler.send type, line, options
+              handler.send type, line, options, $~
               return;
             else
+              # not so good...
               handler.send :teased_line, type, line, options
             end
         end
