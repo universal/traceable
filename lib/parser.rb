@@ -11,24 +11,25 @@ module Traceable
     def parse
       File.open(file_name, "r") do |f|
         f.each_line do |line|
-          parse_line(line)
+          parse_line(line, f.lineno)
         end
       end
     end
     
-    def parse_line(line)
-      @log_lines.each do |type, options|
+    def parse_line(line, lineno)
+      ActiveRecord::Base.silence do
+        @log_lines.each do |type, options|
         if options[:teaser] =~ line
             if options[:regexp] =~ line
-              handler.send type, line, options, $~
-              return;
+              handler.send(type, line, options, $~) and return
             else
               # not so good...
-              handler.send :teased_line, type, line, options
+              handler.send :teased_line, type, line, options, lineno
             end
         end
       end
-      handler.send :unknown_line, line
+      handler.send :unknown_line, line, lineno
+      end
     end
   end
 end

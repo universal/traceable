@@ -4,8 +4,8 @@ module Traceable
     ## http://github.com/wvanbergen/rails-log-analyzer/tree/master
   LOG_LINES = {
       :started => {
-        :teaser => /Processing/,
-        :regexp => /Processing (\w+)#(\w+) \(for (\d+\.\d+\.\d+\.\d+) at (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)\) \[([A-Z]+)\]/,
+        :teaser => /^Processing/,
+        :regexp => /^Processing (\w+)#(\w+) \(for (\d+\.\d+\.\d+\.\d+) at (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)\) \[([A-Z]+)\]/,
         :params => { :controller => 1, :action => 2, :ip => 3, :method => 5, :timestamp => 4 }
       },
       :failed => {
@@ -14,8 +14,8 @@ module Traceable
         :params => { :error => 1, :exception_string => 2, :stack_trace => 3 }
       },
       :completed => {
-        :teaser => /Completed/,
-        :regexp => /Completed in (\d+\.\d{5}) \(\d+ reqs\/sec\) (\| Rendering: (\d+\.\d{5}) \(\d+\%\) )?(\| DB: (\d+\.\d{5}) \(\d+\%\) )?\| (\d\d\d).+\[(http.+)\]/,
+        :teaser => /^Completed/,
+        :regexp => /^Completed in (\d+\.\d{5}) \(\d+ reqs\/sec\) (\| Rendering: (\d+\.\d{5}) \(\d+\%\) )?(\| DB: (\d+\.\d{5}) \(\d+\%\) )?\| (\d\d\d).+\[(http.+)\]/,
         :params => { :url => 7, :status => [6, :to_i], :duration => [1, :to_f], :rendering => [3, :to_f], :db => [5, :to_f] }
       },
       :session => {
@@ -24,21 +24,20 @@ module Traceable
         :params => {:id => 1}
       },
       :parameters => {
-        :teaser => /Parameters/,
-        :regexp => /Parameters: ([{}\/"=>,\s\w]+)\z/,
+        :teaser => /^\s\sParameters/,
+        :regexp => /^\s\sParameters: \{(.*)\}$/,
         :params => {:params => 1}
       },
       :render => {
-        :teaser => /Rendering/,
-        :regexp => //,
-        :params => {}
+        :teaser => /^(Rendering \w|Sending data)/,
+        :regexp => /^(Rendering|Sending data) ([\w\/\.]+)/,
+        :params => {:view => 2}
       },
       :redirect => {
-       :teaser => //,
-       :regexp => //,
-       :params => {}
+       :teaser => /^Redirected/,
+       :regexp => /^Redirected to (http.+)/,
+       :params => {:url => 1}
       }
-
     }
   end
 end
