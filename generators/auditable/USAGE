@@ -1,0 +1,6 @@
+Description:
+    Generates migration, models and controller with views for the audit-log.
+
+Example:
+    ./script/generate auditable Controller SessionModel RequestModel ChangeModel
+
