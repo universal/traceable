@@ -2,7 +2,7 @@ module Traceable
   module LineTypes
     ## rails log analyzer
     ## http://github.com/wvanbergen/rails-log-analyzer/tree/master
-  LOG_LINES = {
+    LOG_LINES = {
       :started => {
         :teaser => /^Processing/,
         :regexp => /^Processing (\w+)#(\w+) \(for (\d+\.\d+\.\d+\.\d+) at (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)\) \[([A-Z]+)\]/,
@@ -10,13 +10,13 @@ module Traceable
       },
       :failed => {
         :teaser => /Error/,
-        :regexp => /(RuntimeError|ActiveRecord::\w+|ArgumentError) \((\w+)\): (\w+)/,
+        :regexp => /(RuntimeError|ActiveRecord::\w+|ArgumentError|ActionController::\w+|ActionView::\w+|NoMethodError|NameError) \((\w+)\): (\w+)/,
         :params => { :error => 1, :exception_string => 2, :stack_trace => 3 }
       },
       :completed => {
         :teaser => /^Completed/,
         :regexp => /^Completed in (\d+\.\d{5}) \(\d+ reqs\/sec\) (\| Rendering: (\d+\.\d{5}) \(\d+\%\) )?(\| DB: (\d+\.\d{5}) \(\d+\%\) )?\| (\d\d\d).+\[(http.+)\]/,
-        :params => { :url => 7, :status => [6, :to_i], :duration => [1, :to_f], :rendering => [3, :to_f], :db => [5, :to_f] }
+        :params => { :url => 7, :status => 6, :duration => 1, :rendering => 3, :db => 5}
       },
       :session => {
         :teaser => /Session ID/, 
@@ -37,6 +37,31 @@ module Traceable
        :teaser => /^Redirected/,
        :regexp => /^Redirected to (http.+)/,
        :params => {:url => 1}
+      }
+    }
+    AUDIT_LINES = {
+      :started => {
+        :teaser => /^REQUEST WHEN/,
+        :regexp => /^REQUEST WHEN: (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d) IP: (\d+.\d+\.\d+\.\d+) METHOD: (\w+) CONTROLLER: (\w+) ACTION: (\w+) SESSION-ID: (.+) PARAMS: (.+)/,
+        :params => {:when => 1, :ip => 2, :method => 3, :controller => 4, :action => 5, :session_id => 6, :params => 7 }
+      },
+#      MODEL: #{model.class} ID: #{model.new_record? ? "new_record" : model.id} CHANGES: #{model.changes.inspect}}
+      :before_saved => {
+        :teaser => /^MODEL/,
+        :regexp => /^MODEL: (\w+) ID: (\d+|new_record) CHANGES: (.+)/,
+        :params => {:model => 1, :id => 2, :changes => 3}
+
+      },
+#      #{status}: #{model.class} ID: #{model.id} ATTRIBUTES: #{model.attributes.inspect}})
+      :after_saved => {
+       :teaser => /CREATED|UPDATED|DESTROYED/,
+       :regexp => /^(CREATED|UPDATED|DESTROYED): (\w+) ID: (\d+) ATTRIBUTES: (.+)/,
+       :params => {:status => 1, :model => 2, :id => 3, :attributes => 4}
+      },
+      :finished => {
+        :teaser => /^REQUEST ENDED/,
+        :regexp => /^REQUEST ENDED/,
+        :params => { }
       }
     }
   end

@@ -15,11 +15,25 @@ module Traceable
       @teased = []
       @unknown = []
     end
-   
+    
     def log_lines
       Traceable::LineTypes::LOG_LINES
     end
-
+   
+    def prepare
+    end 
+    
+    def finish_up
+      requests = TraceableRequest.find(:all, :conditions => {:controller => "SessionsController", :action => "create", :method => "POST"})
+      requests.each do |request|
+        if request.traceable_session
+          if match = request.parameters.match(/"login"=>("\w+")/)
+            request.traceable_session.login = match[1]
+            request.traceable_session.save
+          end
+        end
+      end
+    end    
 #   { :controller => 1, :action => 2, :ip => 3, :method => 5, :timestamp => 4 }
     def started(line, options, match_data)
       unless TraceableRequest.first(:conditions => {:controller => match_data[1],
@@ -53,7 +67,7 @@ module Traceable
   
     def render(line, options, match_data)
       if @status == :inside
-        @current.rendered = match_data[options [:view]]
+        @current.rendered = match_data[options[:params][:view]]
       end
     end
     
@@ -85,11 +99,11 @@ module Traceable
     end
     
     def teased_line(type, line, options, lineno)
-#      puts type
+      @stats[:teased] += 1
       if @status == :inside
-        @stats[:teased] += 1
-        TraceableTeased.create(:type => type.to_s, :line => line, :lineno => lineno)
-        @teased << line
+        @current.teaseds.build(:type => type.to_s, :line => line, :lineno => lineno)
+      else
+        TraceableTeased.create(:type => type.to_s, :line => line, :lineno => lineno)        
       end
     end 
     
