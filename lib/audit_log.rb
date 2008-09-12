@@ -1,5 +1,6 @@
 class AuditLog < ActiveSupport::BufferedLogger
   def audit(controller)
+    RAILS_DEFAULT_LOGGER.debug "current_user: #{controller.send :current_user}"
     flush
     info(%Q{REQUEST WHEN: #{Time.now.to_s(:db)} IP: #{controller.request.remote_ip} METHOD: #{controller.request.method.to_s.upcase} CONTROLLER: #{controller.controller_class_name} ACTION: #{controller.action_name} SESSION-ID: #{controller.session.session_id.gsub(/\015?\012/, '')} PARAMS: #{controller.respond_to?(:filter_parameters) ? controller.filter_parameters(controller.params).inspect : controller.params.inspect}})
   end

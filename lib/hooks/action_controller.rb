@@ -1,14 +1,10 @@
 class ActionController::Base
-  before_filter {|controller| audit(controller)}
-  after_filter :end_audit
- 
-  private
-  def self.audit(controller)
+  around_filter do |controller, action|
     DEFAULT_AUDIT_LOG.audit controller
-  end
-  
-  def end_audit
+    action.call
     DEFAULT_AUDIT_LOG.end_audit
   end
+ 
+  ## def audit_log; DEF.. ||= new AuditLog....
   
 end

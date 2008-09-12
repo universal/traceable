@@ -1,0 +1,31 @@
+<p>
+  <b>Login:</b>
+  <%%=h @<%= session_singular_name %>.login %>
+</p>
+<%% form_tag(<%= singular_name %>_path(@<%= session_singular_name %>), :method => :get) do %>
+  <%%= label_tag :query, "Search" %><br/>
+  <%%= text_field_tag :query, params[:query] || "Enter your query here" %>
+  <%%= submit_tag "Search" %>
+<%% end %>
+<p>
+  Requests
+  <table style="text-align: left;">
+    <tr>
+      <th>When</th>
+      <th>Ip</th>
+      <th>Changes</th>
+    </tr>
+    <tr>
+      <th>Controller</th>
+      <th>Action</th>
+      <th>Method</th>
+    </tr>
+    <tr>
+      <th colspan="3">Parameters</th>
+    </tr> 	
+     <%%= render :partial => 'request', :collection => @<%= request_plural_name %> %>
+  </table>
+</p>
+
+
+<%%= link_to 'Back', <%= plural_name %>_path %>

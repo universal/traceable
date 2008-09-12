@@ -18,11 +18,11 @@ class <%= migration_name %> < ActiveRecord::Migration
     end
     add_index("<%= request_table_name %>", [:controller, :action, :method, :ip, :when], :name => "<%= singular_name %>_find_index")
     
-    create_table "<%= change_table_name %>" do |t|
+    create_table "<%= modification_table_name %>" do |t|
        t.string :audited_type
        t.references :audited
-       t.text :changes
-       t.text :attributez
+       t.text :modifications
+       t.text :values
        t.string :status
        t.references "<%= request_singular_name %>"       
     end    
@@ -32,6 +32,6 @@ class <%= migration_name %> < ActiveRecord::Migration
   def self.down
     drop_table "<%= session_table_name %>"
     drop_table "<%= request_table_name %>"
-    drop_table "<%= change_table_name %>"
+    drop_table "<%= modification_table_name %>"
   end
 end

@@ -1,0 +1,16 @@
+<tr>
+  <td><%%= request.when %></td>
+  <td><%%= h request.ip %></td>
+  <td><%%= request.modifications.count %></td>  
+</tr>
+<tr>
+  <td><%%= h request.controller %></td>
+  <td><%%= h request.action %></td>
+  <td><%%= h request.method %></td>
+</tr>
+<tr>
+  <td colspan="3"><%%= h request.parameters %></td>
+</tr>
+<%% if request.modifications.count > 0 -%>
+  <%%= render_partial "modification", :collection => request.modifications %>
+<%% end -%>

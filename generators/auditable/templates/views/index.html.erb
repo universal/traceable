@@ -1,0 +1,23 @@
+<h1>Listing <%= session_class_name.pluralize %></h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>User name</th>
+  </tr>
+
+<%% for <%= session_singular_name %> in @<%= session_plural_name %> %>
+  <tr>
+    <td><%%= link_to h(<%= session_singular_name %>.session_id[0..15]), <%= singular_name%>_path(<%= session_singular_name %>) %></td>
+    <td><%%=h <%= session_singular_name %>.login %></td>
+  </tr>
+<%% end %>
+</table>
+
+<br />
+<%%= button_to "Parse", parse_<%=plural_name %>_path, :method => :post %>
+<%% form_tag(search_<%=plural_name %>_path) do %>
+  <%%= label_tag :query, "Search" %>
+  <%%= text_field_tag :query, params[:query] || "Enter your query here" %>
+  <%%= submit_tag "Search" %>
+<%% end %>
