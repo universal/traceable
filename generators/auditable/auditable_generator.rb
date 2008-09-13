@@ -57,7 +57,8 @@ class AuditableGenerator < Rails::Generator::NamedBase
       m.class_collisions class_path, "#{class_name}Controller", "#{class_name}Helper"
       m.class_collisions session_class_path, "#{session_class_name}" 
       m.class_collisions request_class_path, "#{request_class_name}"  
-      m.class_collisions modification_class_path, "#{modification_class_name}" 
+      m.class_collisions modification_class_path, "#{modification_class_name}"
+      m.class_collisions [], "Auditor" 
       
       m.directory File.join('app/controllers', class_path)
       m.directory File.join('app/models', session_class_path)
@@ -66,7 +67,9 @@ class AuditableGenerator < Rails::Generator::NamedBase
 
       m.directory File.join('app/helpers', class_path)
       m.directory File.join('app/views', class_path, file_name)
-
+      
+      m.template 'auditor.rb', File.join('lib', 'auditor.rb')
+      
       m.template 'controller.rb',
                   File.join('app/controllers',
                             class_path,
@@ -104,9 +107,9 @@ class AuditableGenerator < Rails::Generator::NamedBase
           :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}Tables",
         }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}_tables"
       end
-    
-      # m.directory "lib"
-      # m.template 'README', "README"
+      
+      # TODO post install notes...    
+
     end
   end
 end

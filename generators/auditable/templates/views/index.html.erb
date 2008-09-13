@@ -8,7 +8,7 @@
 
 <%% for <%= session_singular_name %> in @<%= session_plural_name %> %>
   <tr>
-    <td><%%= link_to h(<%= session_singular_name %>.session_id[0..15]), <%= singular_name%>_path(<%= session_singular_name %>) %></td>
+    <td><%%= link_to h(<%= session_singular_name %>.audit_id[0..15]), <%= singular_name%>_path(<%= session_singular_name %>) %></td>
     <td><%%=h <%= session_singular_name %>.login %></td>
   </tr>
 <%% end %>

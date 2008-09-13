@@ -1,7 +1,7 @@
 class <%= migration_name %> < ActiveRecord::Migration
   def self.up
     create_table "<%= session_table_name %>" do |t|
-      t.string :session_id
+      t.string :audit_id
       t.string :login
       t.timestamps
     end
