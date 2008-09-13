@@ -35,7 +35,7 @@ module Traceable
       end
     end    
     
-    # :params => {:when => 1, :ip => 2, :method => 3, :controller => 4, :action => 5, :session_id => 6, :params => 7 }
+    # :params => {:when => 1, :ip => 2, :method => 3, :controller => 4, :action => 5, :audit_id => 6, :params => 7 }
     def started(line, options, match_data)
       unless request.first(:conditions => {:controller => match_data[options[:params][:controller]],
                                            :action => match_data[options[:params][:action]],
@@ -49,7 +49,7 @@ module Traceable
                                :method => match_data[options[:params][:method]],
                                :when => match_data[options[:params][:when]],
                                :parameters => match_data[options[:params][:params]])
-        @current_request.session = session.find_or_create_by_session_id(match_data[options[:params][:session_id]])
+        @current_request.session = session.find_or_create_by_audit_id(match_data[options[:params][:audit_id]])
         @current_request.save
         @stats[:started] += 1
       end

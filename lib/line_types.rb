@@ -42,8 +42,8 @@ module Traceable
     AUDIT_LINES = {
       :started => {
         :teaser => /^REQUEST WHEN/,
-        :regexp => /^REQUEST WHEN: (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d) IP: (\d+.\d+\.\d+\.\d+) METHOD: (\w+) CONTROLLER: (\w+) ACTION: (\w+) SESSION-ID: (.+) PARAMS: (.+)/,
-        :params => {:when => 1, :ip => 2, :method => 3, :controller => 4, :action => 5, :session_id => 6, :params => 7 }
+        :regexp => /^REQUEST WHEN: (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d) IP: (\d+.\d+\.\d+\.\d+) METHOD: (\w+) CONTROLLER: (\w+) ACTION: (\w+) AUDIT-ID: (.+) PARAMS: (.+)/,
+        :params => {:when => 1, :ip => 2, :method => 3, :controller => 4, :action => 5, :audit_id => 6, :params => 7 }
       },
 #      MODEL: #{model.class} ID: #{model.new_record? ? "new_record" : model.id} CHANGES: #{model.changes.inspect}}
       :before_saved => {
