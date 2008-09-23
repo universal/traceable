@@ -11,6 +11,6 @@
 <tr>
   <td colspan="3"><%%= h request.parameters %></td>
 </tr>
-<%% if request.modifications.count > 0 -%>
-  <%%= render_partial "modification", :collection => request.modifications %>
+<%% if (request.modifications.count > 0) %>
+  <%%= render :partial => "modification", :collection => request.modifications %>
 <%% end -%>

@@ -4,7 +4,6 @@ class AuditLog < ActiveSupport::BufferedLogger
     info(%Q{REQUEST WHEN: #{Time.now.to_s(:db)} IP: #{controller.request.remote_ip} METHOD: #{controller.request.method.to_s.upcase} CONTROLLER: #{controller.controller_class_name} ACTION: #{controller.action_name} AUDIT-ID: #{controller.session[:audit_id]} PARAMS: #{controller.respond_to?(:filter_parameters) ? controller.send(:filter_parameters,controller.params).inspect : controller.params.inspect}})
   end
   
-  
   def before_saved(model)
     info(%Q{MODEL: #{model.class} ID: #{model.new_record? ? "new_record" : model.id} CHANGES: #{model.changes.inspect}})
   end
