@@ -85,7 +85,6 @@ class AuditableGenerator < Rails::Generator::NamedBase
         # Note that this fails for nested classes -- you're on your own with setting up the routes.
         m.route_name(singular_name, "#{plural_name}/:id", {:controller => plural_name, :action => 'show'})
         m.route_name("parse_#{plural_name}",    "#{plural_name}/parse", {:controller => plural_name, :action => 'parse'})
-        m.route_name("search_#{plural_name}",    "#{plural_name}/search", {:controller => plural_name, :action => 'search'})
         m.route_name(plural_name, "/#{plural_name}",   {:controller => plural_name, :action => 'index'})
       end
 

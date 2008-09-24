@@ -6,19 +6,14 @@ class <%= class_name %>Controller < ApplicationController
     # TODO js/ajaxified verison
   end 
   
-  def search
+  # GET /<%= session_plural_name %>
+  # GET /<%= session_plural_name %>.xml
+  def index
     if params[:query] && params[:query] != ""
       @<%= session_plural_name %> = <%= session_class_name %>.search(params[:query])
     else
       @<%= session_plural_name %> = <%= session_class_name %>.find(:all) 
     end
-    render :action => 'index'
-  end
-  
-  # GET /<%= session_plural_name %>
-  # GET /<%= session_plural_name %>.xml
-  def index
-    @<%= session_plural_name %> = <%= session_class_name %>.find(:all)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @<%= session_plural_name %>.to_xml(:except => [:updated_at, :created_at]) }

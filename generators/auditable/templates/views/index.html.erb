@@ -16,7 +16,7 @@
 
 <br />
 <%%= button_to "Parse", parse_<%=plural_name %>_path, :method => :post %>
-<%% form_tag(search_<%=plural_name %>_path) do %>
+<%% form_tag(<%=plural_name %>_path) do %>
   <%%= label_tag :query, "Search" %>
   <%%= text_field_tag :query, params[:query] || "Enter your query here" %>
   <%%= submit_tag "Search" %>
