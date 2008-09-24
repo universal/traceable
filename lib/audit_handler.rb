@@ -32,14 +32,14 @@ module Traceable
                                            :action => match_data[options[:params][:action]],
                                            :ip => match_data[options[:params][:ip]],
                                            :method => match_data[options[:params][:method]],
-                                           :when => match_data[options[:params][:when]]})
+                                           :when => Time.zone.parse(match_data[options[:params][:when]])})
         @status = :inside
         @current_request = request.new(:controller => match_data[options[:params][:controller]],
                                :action => match_data[options[:params][:action]],
                                :ip => match_data[options[:params][:ip]],
                                :method => match_data[options[:params][:method]],
                                :when => match_data[options[:params][:when]],
-                               :parameters => match_data[options[:params][:when]])
+                               :parameters => match_data[options[:params][:params]])
 
         unless sess = session.find_by_audit_id(match_data[options[:params][:audit_id]])
           sess = session.new(:audit_id => match_data[options[:params][:audit_id]])
@@ -47,7 +47,7 @@ module Traceable
         login = match_data[options[:params][:login]]
         sess.login = login unless login == "not_logged_in"
         sess.save
-        @current_request.session = session
+        @current_request.session = sess
         @current_request.save
         @stats[:started] += 1
       end
