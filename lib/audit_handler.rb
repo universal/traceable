@@ -24,15 +24,6 @@ module Traceable
     end 
     
     def finish_up
-      requests = request.find(:all, :conditions => {:controller => "SessionsController", :action => "create", :method => "POST"})
-      requests.each do |request|
-        if request.session
-          if match = request.parameters.match(/"login"=>"(\w+)"/)
-            request.session.login = match[1]
-            request.session.save
-          end
-        end
-      end
     end    
     
     # :params => {:when => 1, :ip => 2, :method => 3, :controller => 4, :action => 5, :audit_id => 6, :params => 7 }
@@ -49,7 +40,14 @@ module Traceable
                                :method => match_data[options[:params][:method]],
                                :when => match_data[options[:params][:when]],
                                :parameters => match_data[options[:params][:params]])
-        @current_request.session = session.find_or_create_by_audit_id(match_data[options[:params][:audit_id]])
+
+        unless sess = session.find_by_audit_id(match_data[options[:params][:audit_id]])
+          sess = session.new(:audit_id => match_data[options[:params][:audit_id]])
+        end
+        login = match_data[options[:params][:login]]
+        sess.login = login unless login == "not_logged_in"
+        sess.save
+        @current_request.session = session
         @current_request.save
         @stats[:started] += 1
       end
@@ -71,7 +69,8 @@ module Traceable
         @current_change.save
       end
       @stats[:after_saved] += 1
-    end          
+    end       
+       
     def finished(line, options, match_data)
      @status = nil
      @stats[:finished] += 1
