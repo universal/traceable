@@ -40,8 +40,7 @@ module Traceable
       }
     }
     AUDIT_LINES = {
-       WHEN: IP: METHOD: CONTROLLER: ACTION: AUDIT-ID: LOGIN: PARAMS: 
-    
+#       WHEN: IP: METHOD: CONTROLLER: ACTION: AUDIT-ID: LOGIN: PARAMS: 
       :started => {
         :teaser => /^REQUEST WHEN/,
         :regexp => /^REQUEST WHEN: (\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d) IP: (\d+.\d+\.\d+\.\d+) METHOD: (\w+) CONTROLLER: (\w+) ACTION: (\w+) AUDIT-ID: (.+) LOGIN: (\w+) PARAMS: (.+)/,
