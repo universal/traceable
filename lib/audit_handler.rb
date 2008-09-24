@@ -32,14 +32,14 @@ module Traceable
                                            :action => match_data[options[:params][:action]],
                                            :ip => match_data[options[:params][:ip]],
                                            :method => match_data[options[:params][:method]],
-                                           :when => match_data[options[:params][:when]]})
+                                           :when => match_data[options[:params][:when]].to_s(:db)})
         @status = :inside
         @current_request = request.new(:controller => match_data[options[:params][:controller]],
                                :action => match_data[options[:params][:action]],
                                :ip => match_data[options[:params][:ip]],
                                :method => match_data[options[:params][:method]],
                                :when => match_data[options[:params][:when]],
-                               :parameters => match_data[options[:params][:params]])
+                               :parameters => match_data[options[:params][:when]].to_s(:db))
 
         unless sess = session.find_by_audit_id(match_data[options[:params][:audit_id]])
           sess = session.new(:audit_id => match_data[options[:params][:audit_id]])
