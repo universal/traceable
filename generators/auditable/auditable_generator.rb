@@ -65,11 +65,14 @@ class AuditableGenerator < Rails::Generator::NamedBase
       m.directory File.join('app/models', request_class_path)
       m.directory File.join('app/models', modification_class_path)
 
-      m.directory File.join('app/helpers', class_path)
+#      m.directory File.join('app/helpers', class_path)
       m.directory File.join('app/views', class_path, file_name)
       
-      m.template 'auditor.rb', File.join('lib', 'auditor.rb')
+      m.directory File.join('lib')
+      m.directory File.join('lib', 'tasks')
       
+      m.template 'auditor.rb', File.join('lib', 'auditor.rb')
+      m.template 'parse_task.rake', File.join('lib', 'tasks', "#{plural_name}.rake")
       m.template 'controller.rb',
                   File.join('app/controllers',
                             class_path,
