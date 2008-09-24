@@ -10,7 +10,7 @@ class ActionController::Base
   
   private 
   def audit_id(session)
-    session[:audit_id] ||= generate_id
+    session[:audit_id] ||= self.class.generate_id
   end
   
   AUDIT_CHARS = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890'  
